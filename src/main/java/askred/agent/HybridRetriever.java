@@ -41,6 +41,7 @@ public class HybridRetriever {
 
         // 构建混合检索：BM25 + kNN 向量 + RRF 融合
         final float[] qv = queryVector;  // effectively final for lambda
+        float[] finalQueryVector = queryVector;
         var response = esClient.search(s -> {
             var builder = s.index("xhs_notes").size(10);
 
@@ -62,7 +63,7 @@ public class HybridRetriever {
             );
 
             // RRF 融合排序
-            if (queryVector != null) {
+            if (finalQueryVector != null) {
                 builder = builder.rank(rk -> rk.rrf(r -> r));
             }
 
