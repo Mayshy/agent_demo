@@ -1,0 +1,36 @@
+# Build
+build/
+.gradle/
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Data (keep structure, ignore content)
+data/raw/*
+data/cleaned/*
+data/reports/*
+!data/**/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+*.log
+
+# Secrets
+src/main/resources/application.properties
+
+# Build output
+bin/
+.factorypath

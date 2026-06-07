@@ -1,0 +1,26 @@
+# ── DeepSeek API (需手动填写) ──
+# 从 https://platform.deepseek.com/api_keys 获取
+DEEPSEEK_API_KEY=your-deepseek-api-key-here
+
+# ── LangChain4j — 对话模型 ──
+# cheap: deepseek-chat, temperature=0, maxTokens=50 (路由用)
+langchain4j.open-ai.chat-model.base-url=https://api.deepseek.com
+langchain4j.open-ai.chat-model.api-key=${DEEPSEEK_API_KEY}
+langchain4j.open-ai.chat-model.model-name=deepseek-chat
+langchain4j.open-ai.chat-model.temperature=0.0
+langchain4j.open-ai.chat-model.max-tokens=500
+langchain4j.open-ai.chat-model.log-requests=true
+langchain4j.open-ai.chat-model.log-responses=true
+
+# ── LangChain4j — Embedding 模型 ──
+# (使用美团 aigc，不是 DeepSeek embedding，配置在 LlmConfig.MeituanEmbedder)
+MEITUAN_EMBEDDING_KEY=your-embedding-key-here
+
+# ── Elasticsearch ──
+spring.elasticsearch.uris=http://localhost:9200
+
+# ── Server ──
+server.port=8080
+
+# ── Logging ──
+logging.level.askred=DEBUG

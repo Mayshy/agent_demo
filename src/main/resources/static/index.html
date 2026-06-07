@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AskRed - 旅行决策助手</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f5f5;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.container{width:100%;max-width:640px;background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);overflow:hidden;display:flex;flex-direction:column;height:90vh;max-height:800px}
+.header{background:linear-gradient(135deg,#ff6b6b,#ee5a24);color:#fff;padding:16px 20px;font-size:18px;font-weight:600;text-align:center}
+.messages{flex:1;overflow-y:auto;padding:16px}
+.message{margin-bottom:14px;max-width:85%}
+.message.user{margin-left:auto}
+.message.user .bubble{background:#ff6b6b;color:#fff;border-radius:16px 16px 4px 16px;padding:10px 14px}
+.message.agent .bubble{background:#f0f0f0;color:#333;border-radius:16px 16px 16px 4px;padding:10px 14px;white-space:pre-wrap;line-height:1.6}
+.message .label{font-size:11px;color:#999;margin-bottom:3px}
+.message.user .label{text-align:right}
+.input-area{display:flex;padding:12px 16px;border-top:1px solid #eee;gap:8px}
+.input-area input{flex:1;padding:10px 14px;border:1px solid #ddd;border-radius:20px;font-size:15px;outline:none}
+.input-area input:focus{border-color:#ff6b6b}
+.input-area button{background:#ff6b6b;color:#fff;border:none;border-radius:20px;padding:10px 20px;font-size:15px;cursor:pointer;white-space:nowrap}
+.input-area button:hover{background:#ee5a24}
+.typing{color:#999;font-style:italic;padding:8px 14px}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">AskRed · 旅行决策助手</div>
+<div class="messages" id="messages">
+<div class="message agent"><div class="label">AskRed</div><div class="bubble">你好！想去哪里旅行？告诉我目的地、预算和偏好，我来帮你做攻略～</div></div>
+</div>
+<div class="input-area">
+<input id="input" placeholder="比如：想去巴厘岛玩5天，预算5000..." onkeydown="if(event.key==='Enter')send()">
+<button onclick="send()">发送</button>
+</div>
+</div>
+<script>
+const userId = 'user-' + Math.random().toString(36).slice(2,8);
+const sessionId = 'session-' + Date.now();
+
+async function send(){
+  const input = document.getElementById('input');
+  const msg = input.value.trim();
+  if(!msg) return;
+  input.value = '';
+  input.disabled = true;
+
+  const messages = document.getElementById('messages');
+  messages.innerHTML += '<div class="message user"><div class="label">你</div><div class="bubble">'+escapeHtml(msg)+'</div></div>';
+  messages.innerHTML += '<div class="message agent"><div class="label">AskRed</div><div class="bubble typing">思考中...</div></div>';
+  messages.scrollTop = messages.scrollHeight;
+
+  try{
+    const resp = await fetch('/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({userId,sessionId,message:msg})
+    });
+    const data = await resp.json();
+    const bubble = document.querySelector('.typing');
+    if(bubble) bubble.className = 'bubble';
+    if(bubble) bubble.textContent = data.response || '抱歉，出错了';
+  }catch(e){
+    const bubble = document.querySelector('.typing');
+    if(bubble) bubble.textContent = '连接失败: ' + e.message;
+  }
+  messages.scrollTop = messages.scrollHeight;
+  input.disabled = false;
+  input.focus();
+}
+
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+</body>
+</html>
