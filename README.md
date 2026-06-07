@@ -1,8 +1,6 @@
 # AskRed — 多轮决策 Agent 原型
 
 > 🎯 **定位**: 面试导向的原型项目，验证 Agent 工程核心概念，非生产系统。
-> 📍 **代码**: `/Users/shenhuayu/Desktop/Project/agent_demo/`
-> 📍 **文档**: `/Users/shenhuayu/.config/opencode/contexts/projects/agent-try/`
 
 ---
 
@@ -10,7 +8,7 @@
 
 ### 1.1 一句话
 
-一个能记住用户偏好、多轮引导决策的旅行推荐 Agent，基于 Java + Spring Boot + Elasticsearch + DeepSeek。
+一个能混合检索、多轮追问、记住偏好的旅行决策 Agent。
 
 ### 1.2 核心能力
 

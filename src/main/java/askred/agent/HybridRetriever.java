@@ -40,13 +40,14 @@ public class HybridRetriever {
         }
 
         // 构建混合检索：BM25 + kNN 向量 + RRF 融合
+        final float[] qv = queryVector;  // effectively final for lambda
         var response = esClient.search(s -> {
             var builder = s.index("xhs_notes").size(10);
 
             // kNN 向量检索（如果 embedding 可用）
-            if (queryVector != null) {
-                List<Double> vec = new ArrayList<>(queryVector.length);
-                for (float v : queryVector) vec.add((double) v);
+            if (qv != null) {
+                List<Float> vec = new ArrayList<>(qv.length);
+                for (float v : qv) vec.add(v);
                 builder = builder.knn(k -> k
                     .field("embedding")
                     .queryVector(vec)
@@ -75,7 +76,7 @@ public class HybridRetriever {
             results.add(mapToCleanedNote(source));
         }
         log.info("  [RETRIEVE] hybrid (embed={}, rrf={}) -> {} results",
-            queryVector != null, queryVector != null, results.size());
+            qv != null, qv != null, results.size());
         state.setSearchResults(results);
     }
 
