@@ -27,7 +27,7 @@ public class MemoryManager {
         this.cheapModel = cheapModel;
     }
 
-    public AgentState.UserProfile loadProfile(String userId) {
+    public AskRedState.UserProfile loadProfile(String userId) {
         long start = System.currentTimeMillis();
         try {
             GetResponse<Map> resp = esClient.get(g -> g
@@ -40,7 +40,7 @@ public class MemoryManager {
             }
 
             var src = resp.source();
-            var profile = new AgentState.UserProfile(
+            var profile = new AskRedState.UserProfile(
                 userId,
                 stringList(src.get("preferredDestinations")),
                 str(src.get("budgetTier")),
@@ -63,7 +63,7 @@ public class MemoryManager {
         }
     }
 
-    public void saveFromState(AgentState state) {
+    public void saveFromState(AskRedState state) {
         String userId = state.getUserId();
         if (userId == null || state.getMessages().isEmpty()) return;
 
@@ -149,7 +149,7 @@ public class MemoryManager {
             }
         }
 
-        var profile = new AgentState.UserProfile(
+        var profile = new AskRedState.UserProfile(
             userId, destinations, budget, styles, duration, companion);
 
         esClient.index(i -> i

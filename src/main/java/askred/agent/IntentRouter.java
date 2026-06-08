@@ -13,7 +13,7 @@ public class IntentRouter {
         this.cheapModel = cheapModel;
     }
 
-    public void route(AgentState state) {
+    public void route(AskRedState state) {
         String lastMsg = state.getMessages().get(state.getMessages().size() - 1).content();
 
         String prompt = """

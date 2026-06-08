@@ -27,7 +27,7 @@ public class HybridRetriever {
         this.embedder = embedder;
     }
 
-    public void retrieve(AgentState state) throws IOException {
+    public void retrieve(AskRedState state) throws IOException {
         String userMsg = state.getMessages().get(state.getMessages().size() - 1).content();
         String searchQuery = userMsg.replaceAll("[^\\p{L}\\p{N}\\s]", " ").replaceAll("\\s+", " ").trim();
 

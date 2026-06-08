@@ -21,7 +21,7 @@ public class ResponseActor {
         this.expensiveModel = expensiveModel;
     }
 
-    public void act(AgentState state) {
+    public void act(AskRedState state) {
         String response = switch (state.getDecisionStage()) {
             case CLARIFY -> generateClarification(state);
             case RECOMMEND -> generateRecommendation(state);
@@ -30,7 +30,7 @@ public class ResponseActor {
         state.setFinalResponse(response);
     }
 
-    private String generateClarification(AgentState state) {
+    private String generateClarification(AskRedState state) {
         String missing = String.join("、", state.getMissingInfo());
         String history = state.getMessages().stream()
             .map(m -> m.role() + ": " + m.content())
@@ -47,7 +47,7 @@ public class ResponseActor {
         return normalModel.chat(prompt);
     }
 
-    private String generateRecommendation(AgentState state) {
+    private String generateRecommendation(AskRedState state) {
         var results = state.getRankedResults();
         boolean hasProfile = state.getUserProfile() != null;
         String profile = hasProfile

@@ -19,18 +19,18 @@ public class DecisionReasoner {
         this.normalModel = normalModel;
     }
 
-    public void reason(AgentState state) {
+    public void reason(AskRedState state) {
         List<String> missing = checkIfNeedClarify(state);
         if (!missing.isEmpty()) {
-            state.setDecisionStage(AgentState.DecisionStage.CLARIFY);
+            state.setDecisionStage(AskRedState.DecisionStage.CLARIFY);
             state.setMissingInfo(missing);
             return;
         }
-        state.setDecisionStage(AgentState.DecisionStage.RECOMMEND);
+        state.setDecisionStage(AskRedState.DecisionStage.RECOMMEND);
         state.setRankedResults(state.getSearchResults());
     }
 
-    private List<String> checkIfNeedClarify(AgentState state) {
+    private List<String> checkIfNeedClarify(AskRedState state) {
         String lastMsg = state.getMessages().get(state.getMessages().size() - 1).content();
         boolean hasProfile = state.getUserProfile() != null;
         String profile = hasProfile
